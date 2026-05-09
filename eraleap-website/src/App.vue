@@ -162,21 +162,23 @@ onUnmounted(() => window.removeEventListener('mousemove', handleMouseMove));
               <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2v7.31"/><path d="M14 2v7.31"/><path d="M8.5 2h7"/><path d="M14 9.31a6.5 6.5 0 1 1-4 0"/><path d="M5.52 16h12.96"/></svg>
             </div>
             <h3>R&D</h3>
-            <p>Customized AI agent solutions tailored for specialized operational needs.</p>
+            <p>
+              Solve complex business challenges using cutting-edge AI technologies, rapid innovation, and advanced intelligent systems.
+            </p>
           </div>
           <div class="service-card">
             <div class="service-icon">
               <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="16" x="4" y="4" rx="2"/><rect width="6" height="6" x="9" y="9" rx="1"/><path d="M15 2v2"/><path d="M15 20v2"/><path d="M2 15h2"/><path d="M2 9h2"/><path d="M20 15h2"/><path d="M20 9h2"/><path d="M9 2v2"/><path d="M9 20v2"/></svg>
             </div>
-            <h3>Advanced AI</h3>
-            <p>Comprehensive tool training and seamless system integration for enterprise workflows.</p>
+            <h3>Modular AI</h3>
+            <p>Deliver reliable and scalable AI Agent services that seamlessly automate workflows and help with your business.</p>
           </div>
           <div class="service-card">
             <div class="service-icon">
               <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
             </div>
             <h3>Quant System</h3>
-            <p>High-performance, real-time quantitative systems for data-driven decision making.</p>
+            <p>Process massive real-time data streams to power high-speed analytics, predictive intelligence, and instant decision making.</p>
           </div>
         </div>
       </div>
