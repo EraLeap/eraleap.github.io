@@ -1,774 +1,480 @@
 <script setup lang="ts">
-import { ref, reactive, onMounted, onUnmounted, useTemplateRef } from 'vue';
+import { nextTick, onMounted, onUnmounted, reactive, ref, watch } from 'vue'
 
-const botSquad = useTemplateRef<HTMLElement>('botSquad');
-const eyeTransform = ref('translate(0, 0)');
-const showModal = ref(false);
-const isSubmitting = ref(false);
+const showModal = ref(false)
+const mobileMenuOpen = ref(false)
+const isSubmitting = ref(false)
+const firstFormField = ref<HTMLInputElement | null>(null)
 
 const contactForm = reactive({
   name: '',
   email: '',
-  inquiry: ''
-});
+  inquiry: '',
+})
 
-const toggleModal = () => {
-  showModal.value = !showModal.value;
-  if (!showModal.value) {
-    contactForm.name = '';
-    contactForm.email = '';
-    contactForm.inquiry = '';
+const capabilities = [
+  {
+    number: '01',
+    title: 'Enterprise Intelligence',
+    description:
+      'Secure AI assistants that connect teams with trusted answers across enterprise knowledge and operational data.',
+    tags: ['Knowledge retrieval', 'Decision support'],
+  },
+  {
+    number: '02',
+    title: 'Document Intelligence',
+    description:
+      'Systems that understand, structure, and act on high-volume documents while keeping every outcome traceable.',
+    tags: ['Extraction', 'Review automation'],
+  },
+  {
+    number: '03',
+    title: 'Real-time Decision Systems',
+    description:
+      'Streaming analytics and predictive intelligence built for fast-moving, data-intensive environments.',
+    tags: ['Live data', 'Predictive models'],
+  },
+  {
+    number: '04',
+    title: 'AI Agents & Automation',
+    description:
+      'Purpose-built agents that coordinate complex workflows, tools, and human approvals from end to end.',
+    tags: ['Agentic workflows', 'Human in the loop'],
+  },
+]
+
+const principles = [
+  {
+    number: '01',
+    title: 'Built around the operation',
+    description:
+      'We start with the decision, workflow, and people—not the model—so the system creates measurable utility.',
+  },
+  {
+    number: '02',
+    title: 'Engineered for trust',
+    description:
+      'Explainability, observability, audit trails, and human oversight are designed in from the beginning.',
+  },
+  {
+    number: '03',
+    title: 'Ready for real constraints',
+    description:
+      'Private, on-premises, cloud, and Canada-managed deployments support security and data-sovereignty needs.',
+  },
+]
+
+const openModal = async () => {
+  mobileMenuOpen.value = false
+  showModal.value = true
+  await nextTick()
+  firstFormField.value?.focus()
+}
+
+const closeModal = () => {
+  showModal.value = false
+}
+
+const closeMobileMenu = () => {
+  mobileMenuOpen.value = false
+}
+
+const handleSubmit = () => {
+  const lastSent = localStorage.getItem('last_inquiry_date')
+  const now = Date.now()
+
+  if (lastSent && now - Number(lastSent) < 24 * 60 * 60 * 1000) {
+    window.alert(
+      'We received an inquiry from this browser today. Please allow us time to respond, or try again tomorrow.',
+    )
+    return
   }
-};
 
-const handleSubmit = async () => {
-  const lastSent = localStorage.getItem('last_inquiry_date');
-  const now = new Date().getTime();
-  
-  if (lastSent && now - parseInt(lastSent) < 24 * 60 * 60 * 1000) {
-    alert('We have received your inquiry today. Please give us some time to get back to you or you can resend another inquiry tomorrow.');
-    return;
-  }
+  isSubmitting.value = true
 
-  isSubmitting.value = true;
-  
-  // Construct the mailto link dynamically
-  const subject = encodeURIComponent(`Generak Inquiry from ${contactForm.name}`);
+  const subject = encodeURIComponent(`General inquiry from ${contactForm.name}`)
   const body = encodeURIComponent(
     `Name: ${contactForm.name}\n` +
-    `Contact Email: ${contactForm.email}\n\n` +
-    `Inquiry:\n${contactForm.inquiry}`
-  );
+      `Contact email: ${contactForm.email}\n\n` +
+      `Inquiry:\n${contactForm.inquiry}`,
+  )
 
-  window.location.href = `mailto:heng.zhang@eraleap.com?subject=${subject}&body=${body}`;
+  window.location.href = `mailto:heng.zhang@eraleap.com?subject=${subject}&body=${body}`
+  localStorage.setItem('last_inquiry_date', now.toString())
+  isSubmitting.value = false
+  closeModal()
+}
 
-  localStorage.setItem('last_inquiry_date', now.toString());
-  isSubmitting.value = false;
-  toggleModal();
-};
+const handleKeydown = (event: KeyboardEvent) => {
+  if (event.key === 'Escape') {
+    if (showModal.value) closeModal()
+    if (mobileMenuOpen.value) closeMobileMenu()
+  }
+}
 
-const handleMouseMove = (event: MouseEvent) => {
-  if (!botSquad.value) return;
+watch(showModal, (isOpen) => {
+  document.body.classList.toggle('modal-open', isOpen)
+})
 
-  const rect = botSquad.value.getBoundingClientRect();
-  const botCenterX = rect.left + rect.width / 2;
-  const botCenterY = rect.top + rect.height / 2;
-
-  const deltaX = event.clientX - botCenterX;
-  const deltaY = event.clientY - botCenterY;
-  const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-
-  // 1. Calculate how much they should "care" (0 to 1)
-  // They start looking away after 400px
-  const influence = Math.max(0, 1 - distance / 400);
-  
-  const maxMove = 2.5; 
-  const angle = Math.atan2(deltaY, deltaX);
-  
-  // 2. Apply the influence to the move calculation
-  const moveX = Math.cos(angle) * maxMove * influence;
-  const moveY = Math.sin(angle) * maxMove * influence;
-
-  eyeTransform.value = `translate(${moveX}px, ${moveY}px)`;
-};
-
-onMounted(() => window.addEventListener('mousemove', handleMouseMove));
-onUnmounted(() => window.removeEventListener('mousemove', handleMouseMove));
+onMounted(() => window.addEventListener('keydown', handleKeydown))
+onUnmounted(() => {
+  window.removeEventListener('keydown', handleKeydown)
+  document.body.classList.remove('modal-open')
+})
 </script>
 
 <template>
-  <div class="page">
-    <nav class="navbar">
+  <div class="site-shell">
+    <a class="skip-link" href="#main-content">Skip to content</a>
+
+    <header class="site-header">
       <div class="nav-container">
-        <div class="logo">EraLeap</div>
+        <a class="brand" href="#top" aria-label="EraLeap home" @click="closeMobileMenu">
+          <span class="brand-mark" aria-hidden="true"><span></span></span>
+          <span>EraLeap</span>
+        </a>
 
-        <div class="nav-right">
-          <div class="robot-squad" ref="botSquad">
-            
-            <div class="mini-bot bot-purple">
-              <div class="antenna"></div>
-              <div class="bot-head">
-                <div class="bot-eye">
-                  <div class="pupil" :style="{ transform: eyeTransform }"></div>
-                </div>
-                <div class="bot-eye">
-                  <div class="pupil" :style="{ transform: eyeTransform }"></div>
-                </div>
-                <div class="bot-mouth"></div> 
-              </div>
-              <div class="bot-body">
-                <div class="detail"></div>
-              </div>
-            </div>
-            
-            <div class="mini-bot bot-blue">
-              <div class="bot-head">
-                <div class="bot-eye">
-                  <div class="pupil" :style="{ transform: eyeTransform }"></div>
-                </div>
-                <div class="bot-eye">
-                  <div class="pupil" :style="{ transform: eyeTransform }"></div>
-                </div>
-                <div class="bot-mouth"></div> 
-              </div>
-              <div class="bot-body"></div>
-            </div>
+        <nav class="desktop-nav" aria-label="Primary navigation">
+          <a href="#capabilities">Capabilities</a>
+          <a href="#approach">Approach</a>
+          <a href="#about">About</a>
+        </nav>
 
-          </div> <button class="contact-btn" @click="toggleModal">Contact Us</button>
-        </div> 
-      </div> 
-    </nav>
-
-    <section class="hero">
-      <video
-        autoplay
-        muted
-        loop
-        playsinline
-        class="background-video"
-      >
-        <source src="/video/bg_video.mp4" type="video/mp4" />
-        Your browser does not support the video tag.
-      </video>
-
-      <div class="overlay">
-        <h1 class="headline">Practical, reliable AI for complexity</h1>
-      </div>
-    </section>
-
-    <section class="intro">
-      <div class="intro-container">
-        <h2 class="intro-title">About Us</h2>
-        <div class="intro-content">
-          <p>
-            <span class="company-name">EraLeap</span> is a Canadian applied AI and digital innovation company building intelligent systems for complex, data-intensive environments.
-          </p>
-          <p>
-            We combine AI, advanced analytics, automation, and software engineering to deliver real-time decision tools, enterprise knowledge assistants, document intelligence, and cloud-based operational platforms.
-          </p>
-          <p>
-            Our end-to-end capabilities span data processing, model development, deployment, monitoring, and governance. Solutions can run in private, on-premises, cloud, or Canada-managed environments to meet security, privacy, and data-sovereignty requirements.
-          </p>
-          <p>
-            We embed explainability, auditability, and human oversight throughout our work—turning advanced AI into practical capabilities that help organizations operate more efficiently and make better-informed decisions.
-          </p>
+        <div class="nav-actions">
+          <button class="nav-contact" type="button" @click="openModal">
+            Let’s talk
+            <span aria-hidden="true">↗</span>
+          </button>
+          <button
+            class="menu-toggle"
+            type="button"
+            :aria-expanded="mobileMenuOpen"
+            aria-controls="mobile-menu"
+            aria-label="Toggle navigation"
+            @click="mobileMenuOpen = !mobileMenuOpen"
+          >
+            <span></span>
+            <span></span>
+          </button>
         </div>
       </div>
-    </section>
 
-    <section class="what-we-do">
-      <div class="intro-container">
-        <h2 class="intro-title">What We Do</h2>
-        <div class="services-grid">
-          <div class="service-card">
-            <div class="service-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2v7.31"/><path d="M14 2v7.31"/><path d="M8.5 2h7"/><path d="M14 9.31a6.5 6.5 0 1 1-4 0"/><path d="M5.52 16h12.96"/></svg>
-            </div>
-            <h3>R&D</h3>
+      <Transition name="menu">
+        <nav v-if="mobileMenuOpen" id="mobile-menu" class="mobile-nav" aria-label="Mobile navigation">
+          <a href="#capabilities" @click="closeMobileMenu">Capabilities</a>
+          <a href="#approach" @click="closeMobileMenu">Approach</a>
+          <a href="#about" @click="closeMobileMenu">About</a>
+          <button type="button" @click="openModal">Start a conversation <span>↗</span></button>
+        </nav>
+      </Transition>
+    </header>
+
+    <main id="main-content">
+      <section id="top" class="hero">
+        <video
+          autoplay
+          muted
+          loop
+          playsinline
+          preload="metadata"
+          class="hero-video"
+          aria-hidden="true"
+        >
+          <source src="/video/bg_video.mp4" type="video/mp4" />
+        </video>
+        <div class="hero-scrim"></div>
+        <div class="hero-grid" aria-hidden="true"></div>
+
+        <div class="content-container hero-content">
+          <div class="hero-copy">
+            <div class="eyebrow"><span></span> Canadian applied AI</div>
+            <h1>AI that holds up<br />in the real world.</h1>
             <p>
-              Solve complex business challenges using cutting-edge AI technologies, rapid innovation, and advanced intelligent systems.
+              EraLeap builds practical, reliable AI systems for complex,
+              data-intensive environments—engineered from prototype to production.
+            </p>
+            <div class="hero-actions">
+              <button class="button button-primary" type="button" @click="openModal">
+                Start a conversation <span aria-hidden="true">↗</span>
+              </button>
+              <a class="button button-secondary" href="#capabilities">
+                Explore capabilities <span aria-hidden="true">↓</span>
+              </a>
+            </div>
+          </div>
+
+          <div class="system-card" aria-label="EraLeap intelligence system">
+            <div class="system-card-header">
+              <span>Intelligence stack</span>
+              <span class="live-status"><i></i> Production ready</span>
+            </div>
+            <div class="system-flow">
+              <div class="system-node node-input">
+                <span class="node-label">01 / INPUT</span>
+                <strong>Operational data</strong>
+                <small>Documents · streams · systems</small>
+              </div>
+              <span class="flow-line"></span>
+              <div class="system-node node-core">
+                <span class="core-orbit"></span>
+                <span class="core-orbit orbit-two"></span>
+                <span class="core-dot"></span>
+                <div>
+                  <span class="node-label">02 / REASONING</span>
+                  <strong>EraLeap AI</strong>
+                  <small>Models · agents · analytics</small>
+                </div>
+              </div>
+              <span class="flow-line"></span>
+              <div class="system-node node-output">
+                <span class="node-label">03 / OUTCOME</span>
+                <strong>Governed action</strong>
+                <small>Decisions · automation · insight</small>
+              </div>
+            </div>
+            <div class="system-card-footer">
+              <span>Private by design</span>
+              <span>Auditable</span>
+              <span>Human-governed</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="content-container hero-foot">
+          <span>Built in Canada</span>
+          <div>
+            <span>Private infrastructure</span>
+            <span>Enterprise-grade delivery</span>
+            <span>Responsible AI</span>
+          </div>
+        </div>
+      </section>
+
+      <section id="capabilities" class="capabilities section-light">
+        <div class="content-container">
+          <div class="section-heading">
+            <div>
+              <p class="section-kicker">What we build</p>
+              <h2>Intelligence where<br />it matters most.</h2>
+            </div>
+            <p class="section-intro">
+              From a focused use case to a production platform, we combine AI,
+              advanced analytics, automation, and software engineering in one delivery team.
             </p>
           </div>
-          <div class="service-card">
-            <div class="service-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="16" x="4" y="4" rx="2"/><rect width="6" height="6" x="9" y="9" rx="1"/><path d="M15 2v2"/><path d="M15 20v2"/><path d="M2 15h2"/><path d="M2 9h2"/><path d="M20 15h2"/><path d="M20 9h2"/><path d="M9 2v2"/><path d="M9 20v2"/></svg>
-            </div>
-            <h3>Modular AI</h3>
-            <p>Deliver reliable and scalable AI Agent services that seamlessly automate workflows and help with your business.</p>
-          </div>
-          <div class="service-card">
-            <div class="service-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
-            </div>
-            <h3>Quant System</h3>
-            <p>Process massive real-time data streams to power high-speed analytics, predictive intelligence, and instant decision making.</p>
+
+          <div class="capability-grid">
+            <article v-for="capability in capabilities" :key="capability.number" class="capability-card">
+              <div class="card-top">
+                <span>{{ capability.number }}</span>
+                <span class="card-arrow" aria-hidden="true">↗</span>
+              </div>
+              <div>
+                <h3>{{ capability.title }}</h3>
+                <p>{{ capability.description }}</p>
+              </div>
+              <div class="tag-row">
+                <span v-for="tag in capability.tags" :key="tag">{{ tag }}</span>
+              </div>
+            </article>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <!-- CONTACT MODAL -->
-    <Transition name="fade">
-      <div v-if="showModal" class="modal-overlay" @click.self="toggleModal">
-        <div class="modal-content">
-          <button class="close-btn" @click="toggleModal">&times;</button>
-          <h2 class="modal-title">Get in Touch</h2>
-          <p class="modal-subtitle">We'll get back to you as soon as possible.</p>
-          
-          <form @submit.prevent="handleSubmit" class="contact-form">
-            <div class="form-group">
-              <label for="name">Name</label>
-              <input type="text" id="name" v-model="contactForm.name" required placeholder="Your Name" />
+      <section id="approach" class="approach">
+        <div class="content-container">
+          <div class="approach-heading">
+            <p class="section-kicker section-kicker-dark">How we work</p>
+            <h2>Advanced technology.<br /><span>Operational discipline.</span></h2>
+          </div>
+
+          <div class="principles">
+            <article v-for="principle in principles" :key="principle.number" class="principle">
+              <span class="principle-number">{{ principle.number }}</span>
+              <h3>{{ principle.title }}</h3>
+              <p>{{ principle.description }}</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="deployment section-light">
+        <div class="content-container deployment-grid">
+          <div class="deployment-copy">
+            <p class="section-kicker">Designed for your environment</p>
+            <h2>Your data stays<br />on your terms.</h2>
+            <p>
+              We architect around your security, privacy, and sovereignty requirements.
+              Deploy in your cloud, on premises, on private infrastructure, or in a
+              Canada-managed environment.
+            </p>
+            <ul class="check-list">
+              <li><span>✓</span> Flexible deployment architecture</li>
+              <li><span>✓</span> Monitoring and model governance</li>
+              <li><span>✓</span> Explainable, auditable outcomes</li>
+            </ul>
+          </div>
+
+          <div class="deployment-visual" aria-label="Flexible AI deployment options">
+            <div class="visual-header">
+              <span>Deployment architecture</span>
+              <span>ERL / 01</span>
             </div>
-            
-            <div class="form-group">
-              <label for="email">Email</label>
-              <input type="email" id="email" v-model="contactForm.email" required placeholder="your@email.com" />
+            <div class="architecture">
+              <div class="architecture-ring ring-outer"></div>
+              <div class="architecture-ring ring-inner"></div>
+              <div class="architecture-core">
+                <span class="brand-mark brand-mark-small" aria-hidden="true"><span></span></span>
+                <strong>EraLeap</strong>
+                <small>Intelligence layer</small>
+              </div>
+              <span class="architecture-label label-cloud">Your cloud</span>
+              <span class="architecture-label label-private">Private</span>
+              <span class="architecture-label label-onprem">On premises</span>
+              <span class="architecture-label label-canada">Canada-managed</span>
+              <i class="orbit-point point-one"></i>
+              <i class="orbit-point point-two"></i>
+              <i class="orbit-point point-three"></i>
             </div>
-            
-            <div class="form-group">
-              <label for="inquiry">Inquiry</label>
-              <textarea 
-                id="inquiry" 
-                v-model="contactForm.inquiry" 
-                required 
-                placeholder="How can we help you?"
-                rows="5"
-              ></textarea>
+            <div class="visual-footer">
+              <span><i></i> Secure connection</span>
+              <span>Infrastructure agnostic</span>
             </div>
-            
-            <button type="submit" class="submit-btn" :disabled="isSubmitting">
-              {{ isSubmitting ? 'Sending...' : 'Send Message' }}
+          </div>
+        </div>
+      </section>
+
+      <section id="about" class="about">
+        <div class="content-container about-grid">
+          <div>
+            <p class="section-kicker">About EraLeap</p>
+            <h2>Built to move from<br />possibility to practice.</h2>
+          </div>
+          <div class="about-copy">
+            <p class="lead">
+              EraLeap is a Canadian applied AI and digital innovation company
+              building intelligent systems for complex, data-intensive environments.
+            </p>
+            <p>
+              Our end-to-end capabilities span data processing, model development,
+              deployment, monitoring, and governance. We bring the technical depth
+              and product thinking needed to turn advanced AI into dependable
+              operational capability.
+            </p>
+            <div class="about-values">
+              <span>Applied AI</span>
+              <span>Software engineering</span>
+              <span>Advanced analytics</span>
+              <span>Digital innovation</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="cta-section">
+        <div class="content-container cta-card">
+          <div class="cta-glow" aria-hidden="true"></div>
+          <p class="section-kicker section-kicker-dark">Let’s build what’s next</p>
+          <h2>Have a complex problem?<br />That’s where we start.</h2>
+          <button class="button button-primary button-large" type="button" @click="openModal">
+            Talk to our team <span aria-hidden="true">↗</span>
+          </button>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="content-container">
+        <div class="footer-main">
+          <a class="brand" href="#top" aria-label="EraLeap home">
+            <span class="brand-mark" aria-hidden="true"><span></span></span>
+            <span>EraLeap</span>
+          </a>
+          <p>Practical, reliable AI<br />for complex environments.</p>
+          <nav aria-label="Footer navigation">
+            <a href="#capabilities">Capabilities</a>
+            <a href="#approach">Approach</a>
+            <a href="#about">About</a>
+            <button type="button" @click="openModal">Contact</button>
+          </nav>
+        </div>
+        <div class="footer-bottom">
+          <span>© 2026 EraLeap. All rights reserved.</span>
+          <span>Toronto, Canada</span>
+        </div>
+      </div>
+    </footer>
+
+    <Transition name="modal">
+      <div
+        v-if="showModal"
+        class="modal-overlay"
+        role="presentation"
+        @mousedown.self="closeModal"
+      >
+        <div
+          class="modal-content"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="contact-title"
+          aria-describedby="contact-subtitle"
+        >
+          <div class="modal-header">
+            <span class="modal-label">New inquiry / EraLeap</span>
+            <button class="close-button" type="button" aria-label="Close contact form" @click="closeModal">
+              <span></span>
+              <span></span>
             </button>
-          </form>
+          </div>
+          <div class="modal-body">
+            <h2 id="contact-title">Let’s solve something complex.</h2>
+            <p id="contact-subtitle">
+              Tell us a little about the opportunity. Your email app will prepare
+              the message for you to review and send.
+            </p>
+
+            <form class="contact-form" @submit.prevent="handleSubmit">
+              <label>
+                <span>Name</span>
+                <input
+                  ref="firstFormField"
+                  v-model.trim="contactForm.name"
+                  type="text"
+                  name="name"
+                  autocomplete="name"
+                  required
+                  placeholder="Your name"
+                />
+              </label>
+              <label>
+                <span>Work email</span>
+                <input
+                  v-model.trim="contactForm.email"
+                  type="email"
+                  name="email"
+                  autocomplete="email"
+                  required
+                  placeholder="you@company.com"
+                />
+              </label>
+              <label>
+                <span>How can we help?</span>
+                <textarea
+                  v-model.trim="contactForm.inquiry"
+                  name="inquiry"
+                  required
+                  rows="4"
+                  placeholder="A brief overview of your challenge or idea"
+                ></textarea>
+              </label>
+              <button class="button button-primary submit-button" type="submit" :disabled="isSubmitting">
+                {{ isSubmitting ? 'Preparing…' : 'Prepare email' }}
+                <span aria-hidden="true">↗</span>
+              </button>
+            </form>
+          </div>
         </div>
       </div>
     </Transition>
-
-    <footer class="site-footer">
-      <div class="footer-container">
-        <p class="copyright">&copy; 2026 Era Leap. All rights reserved.</p>
-      </div>
-    </footer>
   </div>
 </template>
-
-<style scoped>
-/* IMPORT COMFORTAA FONT */
-@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;700&display=swap');
-
-/* RESET DEFAULT MARGINS */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-/* FLOATING NAVBAR */
-.navbar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 70px;
-  background: rgba(0, 0, 0, 0.6); /* Semi-transparent dark background */
-  backdrop-filter: blur(10px);    /* Modern frosted glass effect */
-  z-index: 1000;                  /* Ensures it stays above everything */
-  display: flex;
-  align-items: center;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.nav-container {
-  width: 100%;
-  margin: 0 30px;
-  padding: 0 30px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.nav-right {
-  display: flex; align-items: flex-end;
-  gap: 25px;
-}
-
-/* --- ROBOT SQUAD LAYOUT --- */
-.robot-squad {
-  display: flex; 
-  gap: 10px;
-  align-items: flex-end; 
-  padding-bottom: 8px;
-}
-
-.mini-bot {
-  display: flex; 
-  flex-direction: column; 
-  align-items: center;
-  position: relative;
-  transition: transform 0.3s ease;
-}
-
-/* --- ROBOT 1: PURPLE SPECIALIST --- */
-.bot-purple .bot-head {
-  width: 30px; height: 20px;
-  background: #aa3bff;
-  border-radius: 5px;
-  display: flex; justify-content: space-evenly; align-items: center;
-  position: relative; /* Anchor for the mouth */
-}
-.bot-purple .bot-body {
-  width: 20px; height: 10px;
-  background: #8e2cdc;
-  border-radius: 4px 4px 0 0;
-}
-.bot-purple .detail {
-  width: 6px; height: 3px; background: rgba(255,255,255,0.3); border-radius: 1px; margin: 2px auto 0;
-}
-.bot-purple .antenna {
-  width: 2px; height: 6px; background: #aa3bff; margin-bottom: -1px;
-}
-
-/* --- ROBOT 2: BLUE OBSERVER --- */
-.bot-blue .bot-head {
-  width: 22px; height: 22px;
-  background: #00d2ff;
-  border-radius: 50%;
-  display: flex; justify-content: space-evenly; align-items: center;
-  position: relative; /* Anchor for the mouth */
-}
-.bot-blue .bot-body {
-  width: 16px; height: 6px;
-  background: #0099cc;
-  border-radius: 10px 10px 0 0;
-}
-
-/* --- SHARED FACE MECHANICS --- */
-.bot-eye {
-  width: 7px; height: 7px;
-  background: white; border-radius: 50%;
-  position: relative; overflow: hidden;
-  z-index: 2;
-}
-
-.pupil {
-  width: 3.5px; height: 3.5px;
-  background: #08060d; border-radius: 50%;
-  position: absolute;
-  top: 1.75px; left: 1.75px;
-  transition: transform 0.05s ease-out;
-}
-
-/* The Mouth - Lifted slightly to stay on the face */
-.bot-mouth {
-  position: absolute;
-  bottom: 3px; /* Lifted from 4px to avoid the body */
-  left: 50%;
-  transform: translateX(-50%);
-  width: 8px;
-  height: 1px;
-  background: rgba(0, 0, 0, 0.4);
-  border-radius: 2px;
-  transition: all 0.2s ease;
-  z-index: 1;
-}
-
-/* --- INTERACTION LOGIC --- */
-
-/* Smile and Perk Up when Button is Hovered */
-.nav-right:has(.contact-btn:hover) .bot-mouth {
-  height: 5px;
-  width: 12px;
-  background: transparent;
-  border-bottom: 2px solid #000;
-  border-radius: 0 0 10px 10px;
-  bottom: 4px; /* Adjusting slightly for the curve height */
-}
-
-.nav-right:has(.contact-btn:hover) .mini-bot {
-  transform: translateY(-5px) scale(1.05);
-}
-
-/* --- LOGO & BUTTON --- */
-.logo {
-  font-family: 'Comfortaa', cursive;
-  font-weight: 700;
-  color: #fff;
-  font-size: 1.5rem;
-}
-
-.contact-btn {
-  background: #fff;
-  color: #08060d;
-  border: none;
-  padding: 10px 22px;
-  border-radius: 50px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.3s ease;
-}
-
-.contact-btn:hover {
-  background: #f4f3ec;
-}
-
-/* UI Elements */
-.logo { font-family: 'Comfortaa'; font-weight: 700; color: white; font-size: 1.5rem; }
-.contact-btn {
-  background: white; color: black; border: none;
-  padding: 12px 24px; border-radius: 50px;
-  font-weight: 600; cursor: pointer; transition: 0.2s;
-}
-.contact-btn:hover { background: #f0f0f0; transform: scale(1.05); }
-
-/* Rest of the UI */
-.logo { font-family: 'Comfortaa'; font-weight: 700; color: white; font-size: 1.5rem; }
-.contact-btn {
-  background: white; color: black; border: none;
-  padding: 12px 24px; border-radius: 50px;
-  font-weight: 600; cursor: pointer;
-}
-
-.logo {
-  font-family: 'Comfortaa', cursive;
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: #fff;
-  letter-spacing: -0.5px;
-}
-
-.contact-btn {
-  font-family: Arial, sans-serif;
-  background-color: #fff;
-  color: #000;
-  border: none;
-  padding: 10px 22px;
-  border-radius: 50px; /* Capsule shape */
-  font-weight: 600;
-  cursor: pointer;
-  transition: transform 0.2s, background-color 0.2s;
-}
-
-.contact-btn:hover {
-  background-color: #e5e5e5;
-  transform: translateY(-2px);
-}
-
-.page {
-  width: 100%;
-  font-family: Arial, Helvetica, sans-serif;
-  color: #fff;
-}
-
-/* HERO VIDEO SECTION */
-.hero {
-  position: relative;
-  width: 100vw;
-  left: 50%;
-  right: 50%;
-  margin-left: -50vw;
-  margin-right: -50vw;
-  height: auto; 
-  overflow: hidden;
-  line-height: 0;
-}
-
-.background-video {
-  position: relative; 
-  width: 100%;
-  height: auto;
-  display: block;
-}
-
-.overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: rgba(0, 0, 0, 0.3);
-  z-index: 2;
-}
-
-.headline {
-  color: white;
-  font-size: clamp(1.8rem, 5vw, 2.5rem);
-  font-weight: 700;
-  padding-top: 33%; /* Adjusted padding since navbar is fixed at top */
-  text-align: center;
-  letter-spacing: 4px;
-  text-shadow: 1px 1px 8px rgba(0,0,0,0.7);
-}
-
-.company-name {
-  font-family: 'Comfortaa', cursive;
-  font-weight: 700;
-  color: #000;
-  font-size: 1.2rem; /* Slightly larger to account for Comfortaa's x-height */
-  letter-spacing: -0.5px;
-}
-
-/* INTRODUCTION SECTION */
-.intro {
-  padding: 120px 20px;
-  background-color: #ffffff;
-  color: #222;
-  width: 100%;
-}
-
-.intro-container {
-  max-width: 800px; /* Slightly tighter for better readability */
-  margin: 0 auto;    /* Keeps the container centered on the page */
-  text-align: left;  /* Aligns the text inside the container to the left */
-}
-
-.intro-title {
-  font-family: 'Comfortaa', cursive;
-  font-size: 2.5rem;
-  font-weight: 700;
-  margin-bottom: 40px;
-  color: #000;
-  letter-spacing: -1px;
-  position: relative;
-}
-
-/* Optional: Adds a small accent line under the title to anchor the left-aligned look */
-.intro-title::after {
-  content: '';
-  display: block;
-  width: 60px;
-  height: 4px;
-  background: #000; /* You can change this to your --accent color later */
-  margin-top: 10px;
-}
-
-.intro-content p {
-  font-size: 1.15rem;
-  line-height: 1.8;
-  color: #444;
-  margin-bottom: 24px;
-  letter-spacing: 0;
-}
-
-@media (max-width: 640px) {
-  .intro {
-    padding: 90px 20px;
-  }
-}
-
-/* FOOTER STYLES */
-.site-footer {
-  padding: 60px 20%;
-  background-color: #f9f9f9; /* Light grey to distinguish from the white Intro section */
-  border-top: 1px solid #eee;
-  color: #888; /* Soft grey text */
-}
-
-.footer-container {
-  width: 100%;
-  margin: 0 auto;
-  text-align: left; /* Keeping consistency with your left-aligned About section */
-}
-
-.ai-note {
-  font-size: 0.9rem; /* Smaller "fine print" size */
-  line-height: 1.6;
-  margin-bottom: 20px;
-  text-align: center;
-}
-
-.ai-note strong {
-  color: #555; /* Slightly darker for emphasis */
-  font-weight: 600;
-}
-
-.footer-link {
-  color: #000;
-  text-decoration: underline;
-  text-underline-offset: 3px;
-  transition: opacity 0.2s;
-}
-
-.footer-link:hover {
-  opacity: 0.7;
-}
-
-.copyright {
-  font-size: 0.8rem;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-  opacity: 0.6;
-  text-align: center;
-}
-
-/* WHAT WE DO SECTION */
-.what-we-do {
-  padding: 120px 20px;
-  background-color: #d8f9ff;
-  color: #222;
-  width: 100%;
-  border-top: 1px solid #eee;
-}
-
-.services-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 30px;
-  margin-top: 20px;
-}
-
-.service-icon {
-  margin-bottom: 20px;
-  color: #000;
-}
-
-.service-card h3 {
-  font-family: 'Comfortaa', cursive;
-  font-size: 1.4rem;
-  margin-bottom: 15px;
-  color: #000;
-}
-
-.service-card p {
-  color: #555;
-  line-height: 1.6;
-}
-
-/* MODAL STYLES */
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.7);
-  backdrop-filter: blur(5px);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 2000;
-}
-
-.modal-content {
-  background: white;
-  padding: 40px;
-  border-radius: 20px;
-  width: 90%;
-  max-width: 500px;
-  position: relative;
-  color: #333;
-}
-
-.modal-title {
-  font-family: 'Comfortaa', cursive;
-  font-size: 2rem;
-  margin-bottom: 10px;
-  color: #000;
-}
-
-.modal-subtitle {
-  margin-bottom: 30px;
-  color: #666;
-}
-
-.contact-form {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  text-align: left;
-}
-
-.form-group label {
-  font-weight: 600;
-  font-size: 0.9rem;
-}
-
-.form-group input, 
-.form-group textarea {
-  padding: 12px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  font-family: inherit;
-  font-size: 1rem;
-}
-
-.submit-btn {
-  background: #aa3bff; /* Matches purple bot */
-  color: white;
-  border: none;
-  padding: 15px;
-  border-radius: 50px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: transform 0.2s, background 0.2s;
-  margin-top: 10px;
-}
-
-.submit-btn:hover:not(:disabled) {
-  background: #8e2cdc;
-  transform: translateY(-2px);
-}
-
-.submit-btn:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-.close-btn {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  background: none;
-  border: none;
-  font-size: 2rem;
-  cursor: pointer;
-  color: #999;
-}
-
-.fade-enter-active, .fade-leave-active { transition: opacity 0.3s; }
-.fade-enter-from, .fade-leave-to { opacity: 0; }
-
-/* SMALL SCREEN STYLES */
-@media (max-width: 1150px) and (min-width: 768px) {
-  .hero {
-    margin-top: 70px; /* Increased top padding to push the video background further down */
-  }
-
-  .headline {
-    font-size: clamp(1rem, 3.5vw, 2rem); /* Further reduced font size to prevent overlapping */
-    padding-top: 20%; /* Removed percentage padding to allow proper centering in the overlay */
-    letter-spacing: 1px; /* Tighter letter spacing for better fit on narrow screens */
-    line-height: 1.3; /* Adjusted line height for readability */
-    max-width: 85%; /* Prevent text from touching the edges of the viewport */
-  }
-}
-
-/* MOBILE RESPONSIVE STYLES */
-@media (max-width: 1150px) and (orientation: portrait) {
-  .nav-container {
-    margin: 0 10px;
-    padding: 0 10px;
-  }
-
-  .logo {
-    font-size: 1.2rem;
-  }
-
-  .nav-right {
-    gap: 10px;
-  }
-
-  .robot-squad {
-    transform: scale(0.8); /* Shrink robots */
-    transform-origin: bottom right;
-    padding-bottom: 5px;
-    gap: 6px;
-  }
-
-  .contact-btn {
-    padding: 8px 16px;
-    font-size: 0.85rem;
-  }
-
-  .hero {
-    margin-top: 70px; /* Increased top padding to push the video background further down */
-  }
-
-  .headline {
-    font-size: clamp(0.75rem, 5vw, 1.1rem); /* Even smaller to avoid overlap */
-    padding-top: 20%;
-    letter-spacing: 1px; /* Tighter letter spacing for better fit on narrow screens */
-    line-height: 1.2;
-    max-width: 90%;
-  }
-}
-</style>
