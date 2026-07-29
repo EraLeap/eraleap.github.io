@@ -132,7 +132,7 @@ onUnmounted(() => window.removeEventListener('mousemove', handleMouseMove));
       </video>
 
       <div class="overlay">
-        <h1 class="headline">Smarter Decisions Powered by the Intelligence</h1>
+        <h1 class="headline">Practical, reliable AI for complexity</h1>
       </div>
     </section>
 
@@ -141,13 +141,16 @@ onUnmounted(() => window.removeEventListener('mousemove', handleMouseMove));
         <h2 class="intro-title">About Us</h2>
         <div class="intro-content">
           <p>
-            <span class="company-name">EraLeap</span> is a technology-driven company specializing in artificial intelligence and digital innovation. We leverage advanced AI techniques, data analytics, and automation tools designed to support fast, accurate decision-making in high-risk, complex environments.
+            <span class="company-name">EraLeap</span> is a Canadian applied AI and digital innovation company building intelligent systems for complex, data-intensive environments.
           </p>
           <p>
-            Leveraging our expertise in these domains, we provide bespoke AI transformation solutions that help businesses modernize operations and make smarter, data-driven decisions.
+            We combine AI, advanced analytics, automation, and software engineering to deliver real-time decision tools, enterprise knowledge assistants, document intelligence, and cloud-based operational platforms.
           </p>
           <p>
-            Our vision is to be a technology-focused value creator: building AI systems capable of high-stakes decision-making while delivering practical solutions that help enterprises thrive in the era of intelligent automation.
+            Our end-to-end capabilities span data processing, model development, deployment, monitoring, and governance. Solutions can run in private, on-premises, cloud, or Canada-managed environments to meet security, privacy, and data-sovereignty requirements.
+          </p>
+          <p>
+            We embed explainability, auditability, and human oversight throughout our work—turning advanced AI into practical capabilities that help organizations operate more efficiently and make better-informed decisions.
           </p>
         </div>
       </div>
@@ -224,9 +227,6 @@ onUnmounted(() => window.removeEventListener('mousemove', handleMouseMove));
 
     <footer class="site-footer">
       <div class="footer-container">
-        <p class="ai-note">
-          Some media are created with vibe-coding and the generative models, then manually polished by our humans to ensure everything is just right. We're all about embracing the fresh topics, responsibly. If something looks off, please contact us.
-        </p>
         <p class="copyright">&copy; 2026 Era Leap. All rights reserved.</p>
       </div>
     </footer>
@@ -486,7 +486,7 @@ onUnmounted(() => window.removeEventListener('mousemove', handleMouseMove));
 .company-name {
   font-family: 'Comfortaa', cursive;
   font-weight: 700;
-  color: #000; /* Keeps it bold and black */
+  color: #000;
   font-size: 1.2rem; /* Slightly larger to account for Comfortaa's x-height */
   letter-spacing: -0.5px;
 }
@@ -506,6 +506,7 @@ onUnmounted(() => window.removeEventListener('mousemove', handleMouseMove));
 }
 
 .intro-title {
+  font-family: 'Comfortaa', cursive;
   font-size: 2.5rem;
   font-weight: 700;
   margin-bottom: 40px;
@@ -530,6 +531,12 @@ onUnmounted(() => window.removeEventListener('mousemove', handleMouseMove));
   color: #444;
   margin-bottom: 24px;
   letter-spacing: 0;
+}
+
+@media (max-width: 640px) {
+  .intro {
+    padding: 90px 20px;
+  }
 }
 
 /* FOOTER STYLES */
