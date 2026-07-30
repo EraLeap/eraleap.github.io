@@ -205,42 +205,6 @@ onUnmounted(() => {
               </a>
             </div>
           </div>
-
-          <div class="system-card" aria-label="EraLeap intelligence system">
-            <div class="system-card-header">
-              <span>Intelligence stack</span>
-              <span class="live-status"><i></i> Production ready</span>
-            </div>
-            <div class="system-flow">
-              <div class="system-node node-input">
-                <span class="node-label">01 / INPUT</span>
-                <strong>Operational data</strong>
-                <small>Documents · streams · systems</small>
-              </div>
-              <span class="flow-line"></span>
-              <div class="system-node node-core">
-                <span class="core-orbit"></span>
-                <span class="core-orbit orbit-two"></span>
-                <span class="core-dot"></span>
-                <div>
-                  <span class="node-label">02 / REASONING</span>
-                  <strong><span class="wordmark-inline">EraLeap</span> AI</strong>
-                  <small>Models · agents · analytics</small>
-                </div>
-              </div>
-              <span class="flow-line"></span>
-              <div class="system-node node-output">
-                <span class="node-label">03 / OUTCOME</span>
-                <strong>Governed action</strong>
-                <small>Decisions · automation · insight</small>
-              </div>
-            </div>
-            <div class="system-card-footer">
-              <span>Private by design</span>
-              <span>Auditable</span>
-              <span>Human-governed</span>
-            </div>
-          </div>
         </div>
 
         <div class="content-container hero-foot">
@@ -398,16 +362,6 @@ onUnmounted(() => {
         </div>
       </section>
 
-      <section class="cta-section">
-        <div class="content-container cta-card">
-          <div class="cta-glow" aria-hidden="true"></div>
-          <p class="section-kicker section-kicker-dark">Let’s build what’s next</p>
-          <h2>Have a complex problem?<br />That’s where we start.</h2>
-          <button class="button button-primary button-large" type="button" @click="openModal">
-            Talk to our team <span aria-hidden="true">↗</span>
-          </button>
-        </div>
-      </section>
     </main>
 
     <footer class="site-footer">

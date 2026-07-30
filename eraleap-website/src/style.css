@@ -265,16 +265,12 @@ video {
 .hero-content {
   position: relative;
   z-index: 2;
-  display: grid;
-  grid-template-columns: minmax(0, 1.18fr) minmax(360px, 0.82fr);
-  align-items: center;
-  gap: 84px;
   padding-top: 80px;
   padding-bottom: 88px;
 }
 
 .hero-copy {
-  max-width: 720px;
+  max-width: 820px;
 }
 
 .eyebrow,
@@ -378,180 +374,6 @@ video {
   border-color: rgba(255, 255, 255, 0.4);
 }
 
-.system-card {
-  position: relative;
-  min-height: 510px;
-  padding: 20px;
-  background:
-    linear-gradient(145deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.025)),
-    rgba(6, 15, 30, 0.5);
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  border-radius: 22px;
-  box-shadow:
-    0 40px 100px rgba(0, 0, 0, 0.42),
-    inset 0 1px 0 rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(18px);
-}
-
-.system-card::after {
-  content: "";
-  position: absolute;
-  inset: 30% 20%;
-  z-index: -1;
-  background: rgba(63, 196, 255, 0.18);
-  filter: blur(60px);
-}
-
-.system-card-header,
-.system-card-footer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  color: rgba(255, 255, 255, 0.48);
-  font-size: 0.62rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.system-card-header {
-  padding-bottom: 18px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
-}
-
-.live-status {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  color: var(--lime);
-}
-
-.live-status i {
-  width: 5px;
-  height: 5px;
-  background: var(--lime);
-  border-radius: 50%;
-  box-shadow: 0 0 10px var(--lime);
-}
-
-.system-flow {
-  min-height: 400px;
-  padding: 34px 4px;
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  justify-content: center;
-}
-
-.system-node {
-  position: relative;
-  min-height: 74px;
-  padding: 15px 18px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 11px;
-}
-
-.system-node strong {
-  margin-top: 5px;
-  font-size: 0.86rem;
-  font-weight: 650;
-}
-
-.system-node small {
-  margin-top: 4px;
-  color: rgba(255, 255, 255, 0.45);
-  font-size: 0.65rem;
-}
-
-.node-label {
-  color: var(--blue);
-  font-size: 0.54rem;
-  font-weight: 800;
-  letter-spacing: 0.14em;
-}
-
-.node-core {
-  min-height: 104px;
-  padding-left: 130px;
-  overflow: hidden;
-  background:
-    radial-gradient(circle at 40px 50%, rgba(102, 221, 255, 0.16), transparent 35%),
-    rgba(102, 221, 255, 0.055);
-  border-color: rgba(102, 221, 255, 0.36);
-}
-
-.flow-line {
-  position: relative;
-  width: 1px;
-  height: 20px;
-  margin-inline: auto;
-  background: linear-gradient(var(--blue), rgba(102, 221, 255, 0.2));
-}
-
-.flow-line::after {
-  content: "";
-  position: absolute;
-  right: -2px;
-  bottom: 2px;
-  width: 5px;
-  height: 5px;
-  border-right: 1px solid var(--blue);
-  border-bottom: 1px solid var(--blue);
-  transform: rotate(45deg);
-}
-
-.core-orbit {
-  position: absolute;
-  left: 25px;
-  width: 70px;
-  height: 70px;
-  border: 1px solid rgba(102, 221, 255, 0.4);
-  border-radius: 50%;
-}
-
-.core-orbit::after {
-  content: "";
-  position: absolute;
-  top: -3px;
-  left: 31px;
-  width: 5px;
-  height: 5px;
-  background: var(--blue);
-  border-radius: 50%;
-  box-shadow: 0 0 9px var(--blue);
-}
-
-.orbit-two {
-  left: 36px;
-  width: 48px;
-  height: 48px;
-  border-color: rgba(139, 125, 255, 0.48);
-  transform: rotate(35deg);
-}
-
-.core-dot {
-  position: absolute;
-  left: 56px;
-  width: 9px;
-  height: 9px;
-  background: var(--white);
-  border-radius: 50%;
-  box-shadow:
-    0 0 12px var(--blue),
-    0 0 30px var(--blue);
-}
-
-.system-card-footer {
-  gap: 8px;
-  padding-top: 16px;
-  border-top: 1px solid rgba(255, 255, 255, 0.12);
-  font-size: 0.52rem;
-}
-
 .hero-foot {
   position: absolute;
   right: 0;
@@ -604,8 +426,7 @@ video {
 .section-heading h2,
 .deployment h2,
 .about h2,
-.approach h2,
-.cta-card h2 {
+.approach h2 {
   font-size: clamp(3rem, 5vw, 5.25rem);
   font-weight: 520;
   line-height: 0.98;
@@ -1114,84 +935,6 @@ video {
   text-transform: uppercase;
 }
 
-.cta-section {
-  padding: 26px;
-  background: var(--white);
-}
-
-.cta-card {
-  position: relative;
-  width: 100%;
-  min-height: 560px;
-  padding: 92px max(40px, calc((100vw - 1180px) / 2));
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: center;
-  color: var(--white);
-  background:
-    linear-gradient(115deg, rgba(6, 15, 29, 0.24), rgba(6, 15, 29, 0.8)),
-    radial-gradient(circle at 75% 45%, rgba(85, 203, 255, 0.42), transparent 28%),
-    radial-gradient(circle at 62% 30%, rgba(139, 125, 255, 0.36), transparent 34%),
-    var(--ink);
-  border-radius: 24px;
-  overflow: hidden;
-}
-
-.cta-card::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  opacity: 0.3;
-  background-image:
-    linear-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.08) 1px, transparent 1px);
-  background-size: 72px 72px;
-  mask-image: radial-gradient(circle at 72% 48%, black, transparent 42%);
-}
-
-.cta-glow {
-  position: absolute;
-  right: 16%;
-  width: 220px;
-  height: 220px;
-  border: 1px solid rgba(255, 255, 255, 0.22);
-  border-radius: 50%;
-  box-shadow:
-    0 0 0 54px rgba(102, 221, 255, 0.05),
-    0 0 0 108px rgba(139, 125, 255, 0.04),
-    inset 0 0 70px rgba(102, 221, 255, 0.1);
-}
-
-.cta-glow::after {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 12px;
-  height: 12px;
-  background: var(--blue);
-  border-radius: 50%;
-  box-shadow: 0 0 20px var(--blue);
-  transform: translate(-50%, -50%);
-}
-
-.cta-card .section-kicker,
-.cta-card h2,
-.cta-card .button {
-  position: relative;
-  z-index: 2;
-}
-
-.cta-card h2 {
-  max-width: 850px;
-}
-
-.button-large {
-  min-width: 210px;
-  margin-top: 42px;
-}
-
 .site-footer {
   padding: 90px 0 30px;
   color: var(--white);
@@ -1418,16 +1161,7 @@ video {
 
   .hero {
     height: auto;
-    min-height: 860px;
-  }
-
-  .hero-content {
-    grid-template-columns: 1fr 360px;
-    gap: 40px;
-  }
-
-  .system-card {
-    min-height: 475px;
+    min-height: 760px;
   }
 
   .deployment-grid {
@@ -1538,8 +1272,8 @@ video {
   }
 
   .hero {
-    min-height: 1040px;
-    align-items: flex-start;
+    min-height: 760px;
+    align-items: center;
   }
 
   .hero-scrim {
@@ -1548,9 +1282,7 @@ video {
   }
 
   .hero-content {
-    padding-top: 142px;
-    grid-template-columns: 1fr;
-    gap: 50px;
+    padding-top: 110px;
   }
 
   .hero-copy {
@@ -1559,11 +1291,6 @@ video {
 
   .hero h1 {
     font-size: clamp(3.7rem, 12vw, 6rem);
-  }
-
-  .system-card {
-    min-height: 440px;
-    max-width: 600px;
   }
 
   .hero-foot {
@@ -1606,16 +1333,6 @@ video {
     padding-top: 0;
   }
 
-  .cta-card {
-    min-height: 520px;
-    padding: 70px 38px;
-  }
-
-  .cta-glow {
-    right: -8%;
-    opacity: 0.7;
-  }
-
   .footer-main {
     grid-template-columns: 1fr 1fr;
   }
@@ -1635,7 +1352,7 @@ video {
   }
 
   .hero {
-    min-height: 1010px;
+    min-height: 760px;
   }
 
   .hero-content {
@@ -1666,46 +1383,6 @@ video {
     width: 100%;
   }
 
-  .system-card {
-    min-height: 426px;
-    padding: 16px;
-    border-radius: 17px;
-  }
-
-  .system-flow {
-    min-height: 342px;
-    padding-block: 20px;
-  }
-
-  .system-card-header {
-    align-items: flex-start;
-    gap: 10px;
-  }
-
-  .system-card-footer span:last-child {
-    display: none;
-  }
-
-  .node-core {
-    padding-left: 102px;
-  }
-
-  .core-orbit {
-    left: 17px;
-    width: 62px;
-    height: 62px;
-  }
-
-  .orbit-two {
-    left: 27px;
-    width: 42px;
-    height: 42px;
-  }
-
-  .core-dot {
-    left: 44px;
-  }
-
   .capabilities,
   .approach,
   .deployment,
@@ -1720,8 +1397,7 @@ video {
   .section-heading h2,
   .deployment h2,
   .about h2,
-  .approach h2,
-  .cta-card h2 {
+  .approach h2 {
     font-size: clamp(2.7rem, 13vw, 4rem);
   }
 
@@ -1806,23 +1482,6 @@ video {
 
   .about-values {
     grid-template-columns: 1fr;
-  }
-
-  .cta-section {
-    padding: 14px;
-  }
-
-  .cta-card {
-    min-height: 520px;
-    padding: 60px 24px;
-    border-radius: 18px;
-  }
-
-  .cta-glow {
-    top: 18%;
-    right: -35%;
-    width: 180px;
-    height: 180px;
   }
 
   .footer-main {
