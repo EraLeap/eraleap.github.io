@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;700&display=swap");
+
 :root {
   --ink: #07101d;
   --ink-soft: #111d2d;
@@ -125,42 +127,23 @@ video {
   display: inline-flex;
   align-items: center;
   justify-self: start;
-  gap: 11px;
   width: max-content;
-  font-size: 1.22rem;
+}
+
+.wordmark,
+.wordmark-inline {
+  font-family: "Comfortaa", "Segoe UI", sans-serif;
   font-weight: 700;
-  letter-spacing: -0.04em;
+  letter-spacing: -0.055em;
 }
 
-.brand-mark {
-  position: relative;
-  width: 23px;
-  height: 23px;
-  display: inline-block;
-  border: 1.5px solid currentColor;
-  border-radius: 7px;
-  transform: rotate(45deg);
+.wordmark {
+  font-size: 1.36rem;
 }
 
-.brand-mark::before,
-.brand-mark span {
-  content: "";
-  position: absolute;
-  inset: 5px;
-  border: 1.5px solid currentColor;
-  border-radius: 3px;
-}
-
-.brand-mark::after {
-  content: "";
-  position: absolute;
-  width: 5px;
-  height: 5px;
-  top: -3px;
-  right: -3px;
-  background: var(--blue);
-  border-radius: 50%;
-  box-shadow: 0 0 14px var(--blue);
+.wordmark-inline {
+  color: inherit;
+  white-space: nowrap;
 }
 
 .desktop-nav {
@@ -333,6 +316,13 @@ video {
   color: rgba(255, 255, 255, 0.7);
   font-size: clamp(1rem, 1.35vw, 1.16rem);
   line-height: 1.65;
+}
+
+.hero-copy > p strong {
+  display: block;
+  margin-bottom: 5px;
+  color: rgba(255, 255, 255, 0.92);
+  font-weight: 620;
 }
 
 .hero-actions {
@@ -631,13 +621,13 @@ video {
 
 .capability-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   border-top: 1px solid var(--line);
   border-left: 1px solid var(--line);
 }
 
 .capability-card {
-  min-height: 390px;
+  min-height: 430px;
   padding: 32px;
   display: flex;
   flex-direction: column;
@@ -698,6 +688,16 @@ video {
   letter-spacing: -0.045em;
 }
 
+.capability-label {
+  display: inline-block;
+  margin-bottom: 14px;
+  color: #58687b;
+  font-size: 0.58rem;
+  font-weight: 780;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
 .capability-card p {
   max-width: 490px;
   color: var(--muted);
@@ -721,6 +721,64 @@ video {
   font-weight: 700;
   letter-spacing: 0.07em;
   text-transform: uppercase;
+}
+
+.solution-areas {
+  margin-top: 56px;
+  display: grid;
+  grid-template-columns: 0.8fr 2.2fr;
+  border-top: 1px solid var(--line);
+  border-left: 1px solid var(--line);
+}
+
+.solution-areas-heading {
+  min-height: 150px;
+  padding: 25px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+.solution-areas-heading > span {
+  font-size: 0.72rem;
+  font-weight: 760;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.solution-areas-heading small {
+  color: #7b8795;
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.solution-area-list {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.solution-area-list > span {
+  min-height: 75px;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  color: #354456;
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  font-size: 0.82rem;
+  font-weight: 620;
+}
+
+.solution-area-list small {
+  color: var(--blue-strong);
+  font-size: 0.53rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
 }
 
 .approach {
@@ -933,15 +991,8 @@ video {
     inset 0 0 35px rgba(102, 221, 255, 0.08);
 }
 
-.brand-mark-small {
-  width: 20px;
-  height: 20px;
-  margin-bottom: 12px;
-}
-
-.architecture-core strong {
-  font-size: 0.94rem;
-  letter-spacing: -0.02em;
+.architecture-core .wordmark-core {
+  font-size: 1.05rem;
 }
 
 .architecture-core small {
@@ -1031,8 +1082,12 @@ video {
   line-height: 1.72;
 }
 
+.about-copy p + p {
+  margin-top: 22px;
+}
+
 .about-copy .lead {
-  margin-bottom: 28px;
+  margin-bottom: 0;
   color: var(--ink);
   font-size: 1.4rem;
   font-weight: 520;
@@ -1190,6 +1245,10 @@ video {
   font-weight: 650;
   letter-spacing: 0.1em;
   text-transform: uppercase;
+}
+
+.footer-bottom .wordmark-inline {
+  text-transform: none;
 }
 
 .modal-overlay {
@@ -1518,6 +1577,10 @@ video {
     gap: 45px;
   }
 
+  .capability-grid {
+    grid-template-columns: 1fr;
+  }
+
   .section-intro {
     max-width: 600px;
   }
@@ -1567,13 +1630,8 @@ video {
     --container: calc(100% - 32px);
   }
 
-  .brand {
-    font-size: 1.1rem;
-  }
-
-  .brand-mark {
-    width: 20px;
-    height: 20px;
+  .wordmark {
+    font-size: 1.2rem;
   }
 
   .hero {
@@ -1674,6 +1732,15 @@ video {
   .capability-card {
     min-height: 340px;
     padding: 25px;
+  }
+
+  .solution-areas,
+  .solution-area-list {
+    grid-template-columns: 1fr;
+  }
+
+  .solution-areas-heading {
+    min-height: 110px;
   }
 
   .deployment-visual {

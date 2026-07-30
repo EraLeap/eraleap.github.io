@@ -15,32 +15,35 @@ const contactForm = reactive({
 const capabilities = [
   {
     number: '01',
-    title: 'Enterprise Intelligence',
+    label: 'R&D',
+    title: 'Applied AI R&D',
     description:
-      'Secure AI assistants that connect teams with trusted answers across enterprise knowledge and operational data.',
-    tags: ['Knowledge retrieval', 'Decision support'],
+      'Solve complex business challenges through advanced AI research, rapid innovation, and production-ready intelligent systems.',
+    tags: ['Rapid innovation', 'Intelligent systems'],
   },
   {
     number: '02',
-    title: 'Document Intelligence',
+    label: 'Modular AI',
+    title: 'AI Agents & Automation',
     description:
-      'Systems that understand, structure, and act on high-volume documents while keeping every outcome traceable.',
-    tags: ['Extraction', 'Review automation'],
+      'Deliver reliable, scalable AI agent services that integrate with your business and automate complex workflows.',
+    tags: ['Agentic workflows', 'Human in the loop'],
   },
   {
     number: '03',
-    title: 'Real-time Decision Systems',
+    label: 'Quant System',
+    title: 'Real-time Quant Systems',
     description:
-      'Streaming analytics and predictive intelligence built for fast-moving, data-intensive environments.',
-    tags: ['Live data', 'Predictive models'],
+      'Process massive real-time data streams to power high-speed analytics, predictive intelligence, and immediate decision-making.',
+    tags: ['Streaming data', 'Predictive intelligence'],
   },
-  {
-    number: '04',
-    title: 'AI Agents & Automation',
-    description:
-      'Purpose-built agents that coordinate complex workflows, tools, and human approvals from end to end.',
-    tags: ['Agentic workflows', 'Human in the loop'],
-  },
+]
+
+const solutionAreas = [
+  'Real-time decision tools',
+  'Enterprise knowledge assistants',
+  'Document intelligence',
+  'Cloud operational platforms',
 ]
 
 const principles = [
@@ -130,8 +133,7 @@ onUnmounted(() => {
     <header class="site-header">
       <div class="nav-container">
         <a class="brand" href="#top" aria-label="EraLeap home" @click="closeMobileMenu">
-          <span class="brand-mark" aria-hidden="true"><span></span></span>
-          <span>EraLeap</span>
+          <span class="wordmark">EraLeap</span>
         </a>
 
         <nav class="desktop-nav" aria-label="Primary navigation">
@@ -190,8 +192,9 @@ onUnmounted(() => {
             <div class="eyebrow"><span></span> Canadian applied AI</div>
             <h1>AI that holds up<br />in the real world.</h1>
             <p>
-              EraLeap builds practical, reliable AI systems for complex,
-              data-intensive environments—engineered from prototype to production.
+              <strong>Practical, reliable AI for complexity.</strong>
+              <span class="wordmark-inline">EraLeap</span> builds intelligent systems
+              for data-intensive environments—engineered from prototype to production.
             </p>
             <div class="hero-actions">
               <button class="button button-primary" type="button" @click="openModal">
@@ -221,7 +224,7 @@ onUnmounted(() => {
                 <span class="core-dot"></span>
                 <div>
                   <span class="node-label">02 / REASONING</span>
-                  <strong>EraLeap AI</strong>
+                  <strong><span class="wordmark-inline">EraLeap</span> AI</strong>
                   <small>Models · agents · analytics</small>
                 </div>
               </div>
@@ -270,6 +273,7 @@ onUnmounted(() => {
                 <span class="card-arrow" aria-hidden="true">↗</span>
               </div>
               <div>
+                <span class="capability-label">{{ capability.label }}</span>
                 <h3>{{ capability.title }}</h3>
                 <p>{{ capability.description }}</p>
               </div>
@@ -277,6 +281,19 @@ onUnmounted(() => {
                 <span v-for="tag in capability.tags" :key="tag">{{ tag }}</span>
               </div>
             </article>
+          </div>
+
+          <div class="solution-areas">
+            <div class="solution-areas-heading">
+              <span>Solution areas</span>
+              <small>Selected applications</small>
+            </div>
+            <div class="solution-area-list">
+              <span v-for="(area, index) in solutionAreas" :key="area">
+                <small>0{{ index + 1 }}</small>
+                {{ area }}
+              </span>
+            </div>
           </div>
         </div>
       </section>
@@ -324,8 +341,7 @@ onUnmounted(() => {
               <div class="architecture-ring ring-outer"></div>
               <div class="architecture-ring ring-inner"></div>
               <div class="architecture-core">
-                <span class="brand-mark brand-mark-small" aria-hidden="true"><span></span></span>
-                <strong>EraLeap</strong>
+                <strong class="wordmark wordmark-core">EraLeap</strong>
                 <small>Intelligence layer</small>
               </div>
               <span class="architecture-label label-cloud">Your cloud</span>
@@ -352,14 +368,25 @@ onUnmounted(() => {
           </div>
           <div class="about-copy">
             <p class="lead">
-              EraLeap is a Canadian applied AI and digital innovation company
-              building intelligent systems for complex, data-intensive environments.
+              <span class="wordmark-inline">EraLeap</span> is a Canadian applied AI
+              and digital innovation company building intelligent systems for
+              complex, data-intensive environments.
+            </p>
+            <p>
+              We combine AI, advanced analytics, automation, and software engineering
+              to deliver real-time decision tools, enterprise knowledge assistants,
+              document intelligence, and cloud-based operational platforms.
             </p>
             <p>
               Our end-to-end capabilities span data processing, model development,
-              deployment, monitoring, and governance. We bring the technical depth
-              and product thinking needed to turn advanced AI into dependable
-              operational capability.
+              deployment, monitoring, and governance. Solutions can run in private,
+              on-premises, cloud, or Canada-managed environments to meet security,
+              privacy, and data-sovereignty requirements.
+            </p>
+            <p>
+              We embed explainability, auditability, and human oversight throughout
+              our work—turning advanced AI into practical capabilities that help
+              organizations operate more efficiently and make better-informed decisions.
             </p>
             <div class="about-values">
               <span>Applied AI</span>
@@ -387,8 +414,7 @@ onUnmounted(() => {
       <div class="content-container">
         <div class="footer-main">
           <a class="brand" href="#top" aria-label="EraLeap home">
-            <span class="brand-mark" aria-hidden="true"><span></span></span>
-            <span>EraLeap</span>
+            <span class="wordmark">EraLeap</span>
           </a>
           <p>Practical, reliable AI<br />for complex environments.</p>
           <nav aria-label="Footer navigation">
@@ -399,7 +425,7 @@ onUnmounted(() => {
           </nav>
         </div>
         <div class="footer-bottom">
-          <span>© 2026 EraLeap. All rights reserved.</span>
+          <span>© 2026 <span class="wordmark-inline">EraLeap</span>. All rights reserved.</span>
           <span>Toronto, Canada</span>
         </div>
       </div>
